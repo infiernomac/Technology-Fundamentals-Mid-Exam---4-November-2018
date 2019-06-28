@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Dungeonest_Dark
+{
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			int health = 100;
+			int coins = 0;
+
+			List<string> dungeonsRooms = Console.ReadLine().Split("|").ToList();
+
+			List<string> dungeonsEvent = new List<string>();
+			List<int> numbers = new List<int>();
+
+			for (int i = 0; i < dungeonsRooms.Count; i++)
+			{
+				string[] split = new string[2];
+
+				split = dungeonsRooms[i].Split().ToArray();
+
+				dungeonsEvent.Add(split[0]);
+				numbers.Add(int.Parse(split[1]));
+			}
+
+			for (int i = 0; i < dungeonsEvent.Count; i++)
+			{
+				if (dungeonsEvent[i].Equals("potion"))
+				{
+					if (health + numbers[i] > 100)
+					{
+						Console.WriteLine($"You healed for {100 - health} hp.");
+						health = 100;
+					}
+					else
+					{
+						health += numbers[i];
+						Console.WriteLine($"You healed for {numbers[i]} hp.");
+					}
+
+					Console.WriteLine($"Current health: {health} hp.");
+				}
+				else if (dungeonsEvent[i].Equals("chest"))
+				{
+					coins += numbers[i];
+					Console.WriteLine($"You found {numbers[i]} coins.");
+				}
+				else
+				{
+					if (health - numbers[i] > 0)
+					{
+						Console.WriteLine($"You slayed {dungeonsEvent[i]}.");
+						health -= numbers[i];
+					}
+					else
+					{
+						Console.WriteLine($"You died! Killed by {dungeonsEvent[i]}.");
+						Console.WriteLine($"Best room: {i + 1}");
+						return;
+					}
+				}
+			}
+
+			Console.WriteLine("You've made it!");
+			Console.WriteLine($"Coins: {coins}");
+			Console.WriteLine($"Health: {health}");
+		}
+	}
+}
